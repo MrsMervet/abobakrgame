@@ -117,7 +117,7 @@
   function updateHud(){
     els.hudScore.textContent=String(state.score).padStart(4,'0');
     els.hudCombo.textContent='×'+state.combo;
-    els.hudProgressText.textContent=`${state.index+1} / ${QUESTIONS.length}`;
+    els.hudProgressText.textContent=`${state.index+1} من ${QUESTIONS.length}`;
     els.hudProgressBar.style.width=`${((state.index+1)/QUESTIONS.length)*100}%`;
   }
 
