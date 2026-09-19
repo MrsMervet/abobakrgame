@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#4931a8" />
+  <meta name="description" content="لعبة تعليمية تفاعلية عن سيرة أبي بكر الصديق رضي الله عنه" />
+  <title>مغامرة الصياد الذكي | سيرة أبي بكر الصديق</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&family=Changa:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/game.css" />
+</head>
+<body>
+  <div class="world" aria-hidden="true">
+    <div class="world__gradient"></div>
+    <div class="world__sun"></div>
+    <div class="world__halo"></div>
+    <div class="world__cloud world__cloud--1"></div>
+    <div class="world__cloud world__cloud--2"></div>
+    <div class="world__cloud world__cloud--3"></div>
+    <div class="world__mountains world__mountains--far"></div>
+    <div class="world__mountains world__mountains--near"></div>
+    <div class="world__dunes"></div>
+    <div class="world__mosque"></div>
+    <div class="world__pattern"></div>
+  </div>
+
+  <div class="app" id="app">
+    <header class="brandbar">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="" class="brand__logo" />
+        <div>
+          <strong>مغامرة الصياد الذكي</strong>
+          <span>لعبة تعليمية تفاعلية</span>
+        </div>
+      </div>
+      <div class="brandbar__actions">
+        <button class="icon-btn" id="soundBtn" type="button" aria-label="تشغيل أو إيقاف الصوت" title="الصوت">🔊</button>
+        <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="ملء الشاشة" title="ملء الشاشة">⛶</button>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="scene scene--active" id="sceneStart" aria-labelledby="startTitle">
+        <div class="hero-card">
+          <div class="hero-card__shine"></div>
+          <div class="game-emblem" aria-hidden="true">
+            <div class="game-emblem__ring"></div>
+            <div class="game-emblem__star">★</div>
+          </div>
+          <p class="eyebrow">اختبر معلوماتك بطريقة ممتعة</p>
+          <h1 id="startTitle">سيرة أبي بكر الصديق <span>رضي الله عنه</span></h1>
+          <p class="lead">اقرأ السؤال، حرّك مؤشر التصويب، ثم أصِب الإجابة الصحيحة وهي تطفو في السماء.</p>
+
+          <div class="teacher-ribbon">
+            <span class="teacher-ribbon__label">إعداد المعلمة</span>
+            <strong>ميرفت أمين</strong>
+          </div>
+
+          <div class="start-form">
+            <label for="playerName">اسم الطفل</label>
+            <div class="input-wrap">
+              <span aria-hidden="true">👦</span>
+              <input id="playerName" type="text" maxlength="24" autocomplete="off" placeholder="اكتب اسمك هنا" />
+            </div>
+            <button class="cta cta--primary" id="startBtn" type="button">
+              <span>ابدأ المغامرة</span><b aria-hidden="true">➜</b>
+            </button>
+          </div>
+
+          <div class="mini-features" aria-label="مميزات اللعبة">
+            <div><span>🎯</span><b>10</b><small>أسئلة</small></div>
+            <div><span>⭐</span><b>نقاط</b><small>وتتابع</small></div>
+            <div><span>☁️</span><b>أهداف</b><small>متحركة</small></div>
+            <div><span>🏆</span><b>نتيجة</b><small>نهائية</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="sceneGame" aria-label="ساحة اللعبة">
+        <div class="hud">
+          <div class="hud__group">
+            <div class="hud-card hud-card--player"><span>👤</span><div><small>اللاعب</small><b id="hudName">—</b></div></div>
+            <div class="hud-card"><span>⭐</span><div><small>النقاط</small><b id="hudScore">0000</b></div></div>
+            <div class="hud-card"><span>🔥</span><div><small>التتابع</small><b id="hudCombo">×1</b></div></div>
+          </div>
+          <div class="hud__progress">
+            <div class="progress-meta"><span>التقدم</span><b id="hudProgressText">1 / 10</b></div>
+            <div class="progress-track"><i id="hudProgressBar"></i></div>
+          </div>
+        </div>
+
+        <div class="question-panel" id="questionPanel">
+          <div class="question-panel__cap">السؤال <span id="questionNo">1</span></div>
+          <h2 id="questionText">...</h2>
+          <p>صوِّب على الإجابة الصحيحة</p>
+        </div>
+
+        <div class="arena" id="arena">
+          <div class="arena__sky-specks" aria-hidden="true"></div>
+          <div class="targets" id="targets"></div>
+          <div class="shot-layer" id="shotLayer" aria-hidden="true"></div>
+          <div class="particle-layer" id="particleLayer" aria-hidden="true"></div>
+
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+          <div class="crosshair" id="crosshair" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><b></b>
+          </div>
+
+          <div class="blaster" id="blaster" aria-hidden="true">
+            <div class="blaster__scope"></div>
+            <div class="blaster__barrel"></div>
+            <div class="blaster__body"><span>★</span></div>
+            <div class="blaster__grip"></div>
+            <div class="blaster__glow"></div>
+          </div>
+
+          <div class="arena-help" id="arenaHelp">
+            <span>🖱️</span> حرّك المؤشر نحو الهدف ثم اضغط
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="sceneEnd" aria-labelledby="endTitle">
+        <div class="result-card">
+          <div class="result-crown">🏆</div>
+          <p class="eyebrow">تمت المهمة بنجاح</p>
+          <h2 id="endTitle">أحسنت يا <span id="resultName">بطلنا</span>!</h2>
+          <p class="result-message" id="resultMessage">لقد أنهيت المغامرة.</p>
+
+          <div class="medal" id="medal">
+            <div class="medal__inner"><b id="resultPercent">100%</b><span>الإنجاز</span></div>
+          </div>
+
+          <div class="result-stats">
+            <div><span>⭐</span><small>النقاط</small><b id="resultScore">0</b></div>
+            <div><span>🎯</span><small>الدقة</small><b id="resultAccuracy">0%</b></div>
+            <div><span>🔥</span><small>أفضل تتابع</small><b id="resultBestCombo">×1</b></div>
+          </div>
+
+          <div class="result-badge" id="resultBadge">بطل المعرفة 🌟</div>
+
+          <div class="result-actions">
+            <button class="cta cta--primary" id="replayBtn" type="button">العب مرة أخرى 🔄</button>
+            <button class="cta cta--ghost" id="homeBtn" type="button">العودة للبداية 🏠</button>
+          </div>
+        </div>
+        <div class="confetti" id="confetti" aria-hidden="true"></div>
+      </section>
+    </main>
+
+    <footer class="footer-note">سيرة أبي بكر الصديق رضي الله عنه • تصميم تعليمي تفاعلي للأطفال</footer>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
